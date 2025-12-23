@@ -1,22 +1,87 @@
-<!-- TOP BAR -->
- {% load static %}
-<header class="border-b">
-    <div class="max-w-7xl mx-auto px-4">
-        <div class="flex justify-between items-center py-2 text-sm text-gray-600">
-            <div class="flex space-x-6">
-                <span>Language</span>
+{% load static %}
+
+<header class="bg-white border-b border-gray-200 shadow-sm">
+    
+    <nav class="hidden sm:block border-b border-gray-100 py-2 bg-gray-50">
+        <div class="container mx-auto px-4 flex justify-between items-center text-sm text-gray-600">
+            <div class="flex space-x-4">
+                <span>English</span>
                 <span>USD</span>
             </div>
-
-            <div class="flex space-x-6">
-                <a href="#" class="flex items-center space-x-1">
-                    <span>Email</span>
+            <div class="flex space-x-4">
+                <a href="#" class="hover:text-blue-600">
+                    <i class="fa fa-envelope"></i> Email
                 </a>
-                <a href="#" class="flex items-center space-x-1">
-                    <span>Call us</span>
+                <a href="#" class="hover:text-blue-600">
+                    <i class="fa fa-phone"></i> Call us
                 </a>
             </div>
         </div>
-    </div>
-</header>
+    </nav>
 
+    <section class="py-4">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-wrap items-center justify-between">
+                
+                <div class="w-1/2 md:w-1/6">
+                    <a href="/" class="inline-block">
+                        <img class="h-10" src="{% static 'images/logo1.png' %}" alt="Logo">
+                    </a>
+                </div>
+
+                <div class="hidden md:block relative group">
+                    <button class="bg-blue-600 text-white px-5 py-2 rounded flex items-center hover:bg-blue-700">
+                        <i class="fa fa-bars mr-2"></i> All Category
+                        <i class="fa fa-chevron-down ml-2 text-xs"></i>
+                    </button>
+                    <div class="absolute left-0 mt-0 w-64 bg-white border border-gray-200 rounded shadow-xl hidden group-hover:block z-50">
+                        <ul class="space-y-2 text-gray-600">
+                            <li><a href="{% url 'store' %}" class="block px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 border-b border-gray-50 last:border-b-0">
+                            All Products
+                        </a></li>
+                        </ul>
+                        {% for category in links %}
+                        <a href="{{ category.get_url }}" class="block px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 border-b border-gray-50 last:border-b-0">
+                            {{ category.category_name }}
+                        </a>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="ml-4">
+                    <a href="/store/" class="text-blue-600 border border-blue-600 px-4 py-2 rounded hover:bg-blue-50 transition">
+                        Store
+                    </a>
+                </div>
+
+                <div class="w-full md:flex-1 md:mx-8 order-last md:order-none mt-4 md:mt-0">
+                    <form action="#" method="GET" class="flex w-full">
+                        <input type="text" name="keyword" class="w-full border border-gray-300 rounded-l px-4 py-2 focus:outline-none focus:border-blue-500" placeholder="Search">
+                        <button type="submit" class="bg-blue-600 text-white px-5 rounded-r hover:bg-blue-700">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </form>
+                </div>
+
+                <div class="flex items-center space-x-6">
+                    <div class="text-sm">
+                        <p class="text-gray-500">Welcome guest!</p>
+                        <div class="font-medium">
+                            <a href="#" class="hover:text-blue-600 text-gray-800">Sign in</a>
+                            <span class="mx-1 text-gray-300">|</span>
+                            <a href="#" class="hover:text-blue-600 text-gray-800">Register</a>
+                        </div>
+                    </div>
+
+                    <a href="#" class="relative p-2 rounded-full border border-gray-200 hover:bg-gray-50 transition">
+                        <i class="fa fa-shopping-cart text-gray-600 text-xl"></i>
+                        <span class="absolute -top-1 -right-1 bg-red-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">
+                            0
+                        </span>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </section>
+</header>
