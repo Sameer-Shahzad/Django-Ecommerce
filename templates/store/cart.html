@@ -34,7 +34,11 @@
                                         </div>
                                     </div>
                                 </td>
-                                <td class="p-4 text-center text-gray-700">{{ cart_item.quantity }}</td>
+                                <td class="p-4 text-center text-gray-700">
+                                    <a href="{% url 'add_cart' cart_item.product.id %}" class="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300">-</a>
+                                    <span class="mx-2 font-bold">{{ cart_item.quantity }}</span>
+                                    <a href="{% url 'add_cart' cart_item.product.id %}" class="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300">+</a>
+                                </td>
                                 <td class="p-4 text-right font-semibold text-gray-900">{{ cart_item.product.price }}</td>
                                 <td class="p-4"></td> 
                             </tr>
@@ -56,12 +60,12 @@
                         </div>
                         <div class="flex justify-between text-gray-600">
                             <span>Tax:</span>
-                            <span>$10.00</span>
+                            <span>${{ tax }}</span>
                         </div>
                         <hr class="my-2">
                         <div class="flex justify-between text-gray-900 font-bold text-xl">
-                            <span>Total:</span>
-                            <span>${{ total }}</span>
+                            <span>Grand Total:</span>
+                            <span>${{ grand_total }}</span>
                         </div>
                     </div>
 
