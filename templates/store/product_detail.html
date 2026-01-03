@@ -76,7 +76,7 @@
                                 <p>Out of Stock</p>
                             </div>
                         {% else %}
-                            <a href="#" class="inline-flex items-center justify-center bg-blue-600 text-white px-8 py-3 rounded-lg font-bold hover:bg-blue-700 transition shadow-lg shadow-blue-200">
+                            <a href="{% url 'add_cart' single_product.id %}" class="inline-flex items-center justify-center bg-blue-600 text-white px-8 py-3 rounded-lg font-bold hover:bg-blue-700 transition shadow-lg shadow-blue-200">
                                 <span class="mr-2">Add to cart</span>
                                 <i class="fas fa-shopping-cart"></i>
                             </a>
