@@ -8,17 +8,23 @@
         <div class="flex flex-col lg:flex-row gap-6">
             
             <aside class="w-full lg:w-3/4">
-                <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                    
-                    <table class="w-full text-left border-collapse">
+                <div class="bg-white rounded-lg shadow-md overflow-hidden p-4">
+                    {% if not cart_items %}
+                        <h2 class="text-3xl flex  align-center justify-center font-bold text-grey-800">Your cart is empty</h2>
+                        <div class="px-3 py-2 flex items-center justify-center"> <a href="{% url 'store' %}" class="bg-blue-600 text-white rounded-lg shadow-md font-bold overflow-hidden px-6 py-2 mt-6 p-3 flex justify-center">Continue Shopping</a> </div>
+  
+                    {% else %}
+                    <table class="w-full text-left border-collapse ">
                         <thead class="bg-gray-50 text-gray-500 uppercase text-xs font-semibold">
-                            
-                            <tr>
+                           
+                          
+                            <tr class="bg-white rounded-lg shadow-md overflow-hidden ">
                                 <th class="p-4">Product</th>
                                 <th class="p-4 w-32 text-center">Quantity</th>
                                 <th class="p-4 w-32 text-right">Price</th>
                                 <th class="p-4 w-10"></th>
                             </tr>
+                        {% endif %}
                         </thead>
                         <tbody class="divide-y divide-gray-200">
                             {% for cart_item in cart_items %}
@@ -35,12 +41,21 @@
                                     </div>
                                 </td>
                                 <td class="p-4 text-center text-gray-700">
-                                    <a href="{% url 'add_cart' cart_item.product.id %}" class="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300">-</a>
+                                    <a href="{% url 'remove_cart' cart_item.product.id %}" class="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300">-</a>
                                     <span class="mx-2 font-bold">{{ cart_item.quantity }}</span>
                                     <a href="{% url 'add_cart' cart_item.product.id %}" class="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300">+</a>
                                 </td>
                                 <td class="p-4 text-right font-semibold text-gray-900">{{ cart_item.product.price }}</td>
                                 <td class="p-4"></td> 
+                                <td>
+                                    <div class="mb-6 flex items-center gap-4"> 
+                                        <span class="text-2xl font-bold text-blue-600">{{ single_product.price }}</span> 
+                                        
+                                        <a href="{% url 'remove_all_cart' cart_item.product.id %}" class="mt-7 text-xs font-bold bg-red-500 text-white px-3 py-1.5 rounded-md hover:bg-red-700 transition uppercase tracking-tighter">
+                                            Remove
+                                        </a>
+                                    </div>
+                                </td>
                             </tr>
                             {% endfor %}
                         </tbody>
@@ -70,7 +85,7 @@
                     </div>
 
                     <div class="mt-6 flex justify-center">
-                        <img src="{% static ' images/misc/payments.png' %}" alt="payments" class="h-8 object-contain">
+                        <img src="{% static 'images/misc/payments.png' %}" alt="payments" class="h-8 object-contain">
                     </div>
 
                     <div class="mt-6 space-y-3">
