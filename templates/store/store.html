@@ -3,9 +3,15 @@
 
 {% block content %}
 
-<section class="section-pagetop bg">
-    <div class="container">
-        <h2 class="title-page">Our Store</h2>
+<section class="relative py-10 bg-gray-100 overflow-hidden shadow-inner">
+    <div class="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
+    
+    <div class="container mx-auto px-4 relative z-10">
+        <h2 class="title-page font-extrabold text-center text-4xl md:text-5xl text-gray-800 tracking-tight uppercase">
+            Our <span class="text-blue-600">Store</span>
+        </h2>
+        <div class="w-24 h-1 bg-blue-600 mx-auto mt-4 rounded-full"></div>
+        <p class="text-center text-gray-500 mt-2 text-sm italic">Explore our latest premium collection</p>
     </div> 
 </section>
 
@@ -77,9 +83,9 @@
                             <div class="mt-2 mb-4"> 
                                 <span class="text-xl font-bold text-gray-900">${{ product.price }}</span>
                             </div>
-                            <button class="w-full bg-blue-600 text-white py-2 rounded flex items-center justify-center space-x-2 hover:bg-blue-700">
+                            <a href="{% url 'add_cart' product.id %}" class="w-full bg-blue-600 text-white py-2 rounded flex items-center justify-center space-x-2 hover:bg-blue-700">
                                 <span>Add to cart</span>
-                            </button>
+                            </a>
                         </div>
                     </div>
                     {% endfor %}

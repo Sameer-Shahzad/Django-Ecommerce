@@ -35,7 +35,7 @@
                                             <img src="{{ cart_item.product.product_image.url }}" alt="product" class="w-full h-full object-cover">
                                         </div>
                                         <div>
-                                            <a href="#" class="text-gray-900 font-medium hover:text-blue-600 transition">{{cart_item.product.product_name}}</a>
+                                            <a href="{{ cart_item.product.get_url }}" class="text-gray-900 font-medium hover:text-blue-600 transition">{{cart_item.product.product_name}}</a>
                                             <p class="text-sm text-gray-500 mt-1">Color: 25 Mpx <br> Size: Canon</p>
                                         </div>
                                     </div>
@@ -92,7 +92,7 @@
                         <a href="./place-order.html" class="block w-full bg-blue-600 text-white text-center py-3 rounded-md font-semibold hover:bg-blue-700 transition">
                             Checkout
                         </a>
-                        <a href="./store.html" class="block w-full bg-gray-100 text-gray-700 text-center py-3 rounded-md font-semibold border border-gray-300 hover:bg-gray-200 transition">
+                        <a href="{% url 'store' %}" class="block w-full bg-gray-100 text-gray-700 text-center py-3 rounded-md font-semibold border border-gray-300 hover:bg-gray-200 transition">
                             Continue Shopping
                         </a>
                     </div>
