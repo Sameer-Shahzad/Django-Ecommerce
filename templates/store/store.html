@@ -91,14 +91,35 @@
                     {% endfor %}
                 </div>
 
-                <nav class="mt-10 flex justify-center">
-                    <ul class="flex border rounded overflow-hidden">
-                        <li class="border-r px-4 py-2 bg-gray-100 text-gray-400">Previous</li>
-                        <li class="border-r px-4 py-2 bg-blue-600 text-white font-bold">1</li>
-                        <li class="border-r px-4 py-2 hover:bg-gray-100">2</li>
-                        <li class="px-4 py-2 hover:bg-gray-100 text-blue-600">Next</li>
-                    </ul>
+                
+                <nav class="mt-10 flex justify-center cursor-pointer">
+                    {% if products.has_other_pages %}
+                        <ul class="flex border rounded overflow-hidden">
+                        {% if products.has_previous %}
+                            <li class="border-r px-4 py-2 hover:bg-gray-200  text-blue-600">
+                                <a href="?page={{products.previous_page_number}}">Previous</a>
+                            </li>
+                        {% else %}
+                            <li class="border-r px-4 py-2 bg-gray-100 text-gray-400">Previous</li>
+                        {% endif %}
+
+                        {% for page_num in products.paginator.page_range %}
+                            {% if products.number == page_num %}
+                                <li class=" cursor-pointer border-r px-4 py-2 hover:bg-gray-200 text-black font-bold">{{ page_num }}</li>
+                            {% else %}
+                                <li class=" cursor-pointer border-r px-4 py-2 hover:bg-gray-200 text-black font-bold"><a href="?page={{ page_num }}">{{ page_num }}</a></li>
+                            {% endif %}
+                        {% endfor %}
+
+                            {% if products.has_next %}
+                            <li class="px-4 py-2 hover:bg-gray-200 text-blue-600"><a href="?page={{products.next_page_number}}">Next</a></li>
+                            {% else %}
+                            <li class="px-4 py-2 text-gray-400">Next</li>
+                            {% endif %}
+                        </ul>
+                    {% endif %}
                 </nav>
+
 
             </main>
         </div>
