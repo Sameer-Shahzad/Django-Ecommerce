@@ -7,11 +7,18 @@
     <div class="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
     
     <div class="container mx-auto px-4 relative z-10">
+        {% if 'search' in request.GET %}
+        <h2 class="title-page font-extrabold text-center text-4xl md:text-2xl text-gray-800 tracking-tight uppercase">
+            Search Results for <span class="text-blue-600">{{ request.GET.search }}</span>
+        </h2>
+        {% else %}
         <h2 class="title-page font-extrabold text-center text-4xl md:text-5xl text-gray-800 tracking-tight uppercase">
             Our <span class="text-blue-600">Store</span>
+             <div class="w-24 h-1 bg-blue-600 mx-auto mt-4 rounded-full"></div>
+            <p class="text-center text-gray-500 mt-2 text-sm italic">Explore our latest premium collection</p>
         </h2>
-        <div class="w-24 h-1 bg-blue-600 mx-auto mt-4 rounded-full"></div>
-        <p class="text-center text-gray-500 mt-2 text-sm italic">Explore our latest premium collection</p>
+        {% endif %}
+       
     </div> 
 </section>
 
@@ -69,26 +76,30 @@
                 </header>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {% for product in products %}
-                    <div class="bg-white border rounded shadow-sm hover:shadow-md transition overflow-hidden">
-                        <div class="h-52 bg-gray-200">
-                            {% if product.product_image %}
-                                <a href="{{ product.get_url }}"><img src="{{ product.product_image.url }}" class="w-full h-full object-cover"></a>
-                            {% else %}
-                                <div class="flex items-center justify-center h-full text-gray-400">No Image</div>
-                            {% endif %}
-                        </div>
-                        <div class="p-4 text-center">
-                            <a href="{{ product.get_url }}" class="text-blue-600 hover:underline font-medium block h-12 overflow-hidden">{{ product.product_name }}</a>
-                            <div class="mt-2 mb-4"> 
-                                <span class="text-xl font-bold text-gray-900">${{ product.price }}</span>
+                    {% if products %}
+                        {% for product in products %}
+                        <div class="bg-white border rounded shadow-sm hover:shadow-md transition overflow-hidden">
+                            <div class="h-52 bg-gray-200">
+                                {% if product.product_image %}
+                                    <a href="{{ product.get_url }}"><img src="{{ product.product_image.url }}" class="w-full h-full object-cover"></a>
+                                {% else %}
+                                    <div class="flex items-center justify-center h-full text-gray-400">No Image</div>
+                                {% endif %}
                             </div>
-                            <a href="{{ product.get_url }}" class="w-full bg-blue-600 text-white py-2 rounded flex items-center justify-center space-x-2 hover:bg-blue-700">
-                                <span>View Details</span>
-                            </a>
+                            <div class="p-4 text-center">
+                                <a href="{{ product.get_url }}" class="text-blue-600 hover:underline font-medium block h-12 overflow-hidden">{{ product.product_name }}</a>
+                                <div class="mt-2 mb-4"> 
+                                    <span class="text-xl font-bold text-gray-900">${{ product.price }}</span>
+                                </div>
+                                <a href="{{ product.get_url }}" class="w-full bg-blue-600 text-white py-2 rounded flex items-center justify-center space-x-2 hover:bg-blue-700">
+                                    <span>View Details</span>
+                                </a>
+                            </div>
                         </div>
-                    </div>
-                    {% endfor %}
+                        {% endfor %}
+                    {% else %}
+                        <p class="text-center font-bold text-3xl  text-gray-800">No products found. </p>
+                    {% endif %}
                 </div>
 
                 
