@@ -5,6 +5,7 @@ from django.shortcuts import redirect, get_object_or_404
 from django.http import HttpResponse
 from store.models import Product
 from .models import Cart, CartItem
+from django.core.exceptions import ObjectDoesNotExist
 
 # Create your views here.
 
@@ -62,6 +63,8 @@ def remove_cart(request, product_id):
 
 def cart (request, total=0, quantity=0, cart_items=None):
     try:
+        tax = 0
+        grand_total = 0
         cart = Cart.objects.get(cart_id=_cart_id(request))
         cart_items = CartItem.objects.filter(cart=cart, is_active=True)
         for cart_item in cart_items:
