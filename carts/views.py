@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django.shortcuts import redirect, get_object_or_404
 
 from django.http import HttpResponse
-from store.models import Product
+from store.models import Product, Variation
 from .models import Cart, CartItem
 from django.core.exceptions import ObjectDoesNotExist
 
@@ -16,9 +16,27 @@ def _cart_id (request):
     return cart
 
 def add_cart (request, product_id):
-    color = request.GET['color']
-    # size = request.GET['size']
-    return HttpResponse(color)
+    if request.method == 'POST':
+    #     color = request.POST['color']
+    #     size = request.POST['size']
+    # print(color)
+    # print(size)
+        for item in request.POST:
+            key = item
+            value = request.POST[key]
+            
+            if key == 'csrfmiddlewaretoken':
+                continue
+            
+            try:
+                variation = Variation.objects.get(variation_category__iexact=key, variation_value__iexact=value)
+                print(variation)
+            except Exception as e:
+                print(f"Error is there: {e}")
+                
+            # print(key,value)
+            
+    # return HttpResponse(color + ' ' + size)
     
     product = Product.objects.get(id=product_id) 
     try:

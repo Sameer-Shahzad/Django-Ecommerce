@@ -15,8 +15,8 @@
                 </aside>
 
                 <main class="md:w-7/12 p-8 lg:p-12">
-                    <form method="get" action="{% url 'add_cart' single_product.id %}">
-                        
+                    <form method="POST" action="{% url 'add_cart' single_product.id %}">
+                        {% csrf_token %}
                         <article>
                             <h2 class="text-3xl font-bold text-gray-800 mb-4">{{ single_product.product_name }}</h2>
 
@@ -35,22 +35,23 @@
                                 <h6 class="text-sm font-bold text-gray-700 uppercase tracking-wider mb-3">Choose Color</h6>
                                 <select name="color" class="border rounded p-2 text-sm w-1/2" required>
                                     <option value=" " disabled selected>Choose Color</option>
-                                    {% for i in single_product.variation_set.all %}
-                                    <option value="{{ i.variation_value }}">{{ i.variation_value }}</option>
+                                    {% for i in single_product.variation_set.colors %}
+                                    <option value="{{ i.variation_value | lower }}">{{ i.variation_value | capfirst }}</option>
                                     {% endfor %}
                                 </select>
                             </div>
 
                             <div class="mb-8">
                                 <h6 class="text-sm font-bold text-gray-700 uppercase tracking-wider mb-3">Select Size</h6>
-                                {% comment %} <div class="flex flex-wrap gap-2">
-                                    <select name="size" class="border rounded p-2 text-sm w-1/2">
-                                        <option value="small">Small</option>
-                                        <option value="medium">Medium</option>
-                                        <option value="large">Large</option>
-                                        <option value="xlarge">X-Large</option>
+                                <div class="flex flex-wrap gap-2">
+                                    
+                                    <select name="size" class="border rounded p-2 text-sm w-1/2" required>
+                                        <option value=" " disabled selected>Choose Size</option>
+                                        {% for i in single_product.variation_set.sizes %}
+                                            <option value="{{ i.variation_value | lower }}">{{ i.variation_value | capfirst }}</option>
+                                        {% endfor %}
                                     </select>
-                                </div> {% endcomment %}
+                                </div>
                             </div>
                             {% if single_product.stock <= 0 %}
                                 <div class="text-red-600 mb-6 font-bold text-lg">
