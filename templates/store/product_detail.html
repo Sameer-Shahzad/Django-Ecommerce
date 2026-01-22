@@ -15,84 +15,65 @@
                 </aside>
 
                 <main class="md:w-7/12 p-8 lg:p-12">
-                    <article>
-                        <h2 class="text-3xl font-bold text-gray-800 mb-4">{{ single_product.product_name }}</h2>
-
-                        <div class="mb-6"> 
-                            <span class="text-2xl font-bold text-blue-600">${{ single_product.price }}</span> 
-                        </div> 
+                    <form method="get" action="{% url 'add_cart' single_product.id %}">
                         
+                        <article>
+                            <h2 class="text-3xl font-bold text-gray-800 mb-4">{{ single_product.product_name }}</h2>
 
-                        <p class="text-gray-600 leading-relaxed mb-8">
-                           {{ single_product.description }}
-                        </p>
+                            <div class="mb-6"> 
+                                <span class="text-2xl font-bold text-blue-600">${{ single_product.price }}</span> 
+                            </div> 
+                            
 
-                        <hr class="my-6 border-gray-100">
+                            <p class="text-gray-600 leading-relaxed mb-8">
+                            {{ single_product.description }}
+                            </p>
 
-                        <div class="mb-6">
-                            <h6 class="text-sm font-bold text-gray-700 uppercase tracking-wider mb-3">Choose Color</h6>
-                            <div class="flex flex-wrap gap-2">
-                                <label class="cursor-pointer">
-                                    <input type="radio" name="color" class="hidden peer">
-                                    <span class="px-4 py-2 border rounded-md text-sm peer-checked:bg-blue-600 peer-checked:text-white hover:bg-gray-50 transition">Silver</span>
-                                </label>
-                                <label class="cursor-pointer">
-                                    <input type="radio" name="color" class="hidden peer">
-                                    <span class="px-4 py-2 border rounded-md text-sm peer-checked:bg-blue-600 peer-checked:text-white hover:bg-gray-50 transition">Gray</span>
-                                </label>
-                                <label class="cursor-pointer">
-                                    <input type="radio" name="color" class="hidden peer" checked>
-                                    <span class="px-4 py-2 border rounded-md text-sm peer-checked:bg-blue-600 peer-checked:text-white hover:bg-gray-50 transition">Gold</span>
-                                </label>
-                                <label class="cursor-pointer">
-                                    <input type="radio" name="color" class="hidden peer">
-                                    <span class="px-4 py-2 border rounded-md text-sm peer-checked:bg-blue-600 peer-checked:text-white hover:bg-gray-50 transition">Black</span>
-                                </label>
+                            <hr class="my-6 border-gray-100">
+
+                            <div class="mb-6">
+                                <h6 class="text-sm font-bold text-gray-700 uppercase tracking-wider mb-3">Choose Color</h6>
+                                <select name="color" class="border rounded p-2 text-sm w-1/2" required>
+                                    <option value=" " disabled selected>Choose Color</option>
+                                    {% for i in single_product.variation_set.all %}
+                                    <option value="{{ i.variation_value }}">{{ i.variation_value }}</option>
+                                    {% endfor %}
+                                </select>
                             </div>
-                        </div>
 
-                        <div class="mb-8">
-                            <h6 class="text-sm font-bold text-gray-700 uppercase tracking-wider mb-3">Select Size</h6>
-                            <div class="flex flex-wrap gap-2">
-                                <label class="cursor-pointer">
-                                    <input type="radio" name="size" class="hidden peer">
-                                    <span class="w-12 h-10 flex items-center justify-center border rounded-md text-sm peer-checked:bg-blue-600 peer-checked:text-white hover:bg-gray-50 transition">S</span>
-                                </label>
-                                <label class="cursor-pointer">
-                                    <input type="radio" name="size" class="hidden peer" checked>
-                                    <span class="w-12 h-10 flex items-center justify-center border rounded-md text-sm peer-checked:bg-blue-600 peer-checked:text-white hover:bg-gray-50 transition">M</span>
-                                </label>
-                                <label class="cursor-pointer">
-                                    <input type="radio" name="size" class="hidden peer">
-                                    <span class="w-12 h-10 flex items-center justify-center border rounded-md text-sm peer-checked:bg-blue-600 peer-checked:text-white hover:bg-gray-50 transition">L</span>
-                                </label>
-                                <label class="cursor-pointer">
-                                    <input type="radio" name="size" class="hidden peer">
-                                    <span class="w-12 h-10 flex items-center justify-center border rounded-md text-sm peer-checked:bg-blue-600 peer-checked:text-white hover:bg-gray-50 transition">XL</span>
-                                </label>
+                            <div class="mb-8">
+                                <h6 class="text-sm font-bold text-gray-700 uppercase tracking-wider mb-3">Select Size</h6>
+                                {% comment %} <div class="flex flex-wrap gap-2">
+                                    <select name="size" class="border rounded p-2 text-sm w-1/2">
+                                        <option value="small">Small</option>
+                                        <option value="medium">Medium</option>
+                                        <option value="large">Large</option>
+                                        <option value="xlarge">X-Large</option>
+                                    </select>
+                                </div> {% endcomment %}
                             </div>
-                        </div>
-                        {% if single_product.stock <= 0 %}
-                            <div class="text-red-600 mb-6 font-bold text-lg">
-                                <p>Out of Stock</p>
-                            </div>
-                        {% else %}
-                            {% if in_cart %}
-                                <a href="#" class="inline-flex items-center justify-center bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-bold shadow-lg cursor-default opacity-90 transition">
-                                    <span class="mr-2">Added to Cart ✔</span>
-                                </a>
-
-                                <a href="{% url 'cart' %}" class="mx-3 inline-flex items-center justify-center bg-transparent border-2 border-blue-500 text-blue-500 hover:text-blue-700 hover:border-blue-700 px-9 py-3 rounded-lg font-bold transition-all duration-300">
-                                    <span class="mr-2">View Cart 🛒</span>
-                                </a>
+                            {% if single_product.stock <= 0 %}
+                                <div class="text-red-600 mb-6 font-bold text-lg">
+                                    <p>Out of Stock</p>
+                                </div>
                             {% else %}
-                                <a href="{% url 'add_cart' single_product.id %}" class="inline-flex items-center justify-center bg-blue-600 text-white px-8 py-3 rounded-lg font-bold hover:bg-blue-700 transition shadow-lg shadow-blue-200">
-                                    <span class="mr-2">Add to cart</span>
-                                    <i class="fas fa-shopping-cart"></i>
-                                </a>
+                                {% if in_cart %}
+                                    <a href="#" class="inline-flex items-center justify-center bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-bold shadow-lg cursor-default opacity-90 transition">
+                                        <span class="mr-2">Added to Cart ✔</span>
+                                    </a>
+
+                                    <a href="{% url 'cart' %}" class="mx-3 inline-flex items-center justify-center bg-transparent border-2 border-blue-500 text-blue-500 hover:text-blue-700 hover:border-blue-700 px-9 py-3 rounded-lg font-bold transition-all duration-300">
+                                        <span class="mr-2">View Cart 🛒</span>
+                                    </a>
+                                {% else %}
+                                    <button type="submit" class="inline-flex items-center justify-center bg-blue-600 text-white px-8 py-3 rounded-lg font-bold hover:bg-blue-700 transition shadow-lg shadow-blue-200">
+                                        <span class="mr-2">Add to cart</span>
+                                        <i class="fas fa-shopping-cart"></i>
+                                    </button>
+                                {% endif %}
                             {% endif %}
-                        {% endif %}
-                    </article> 
+                        </article> 
+                    </form>
                 </main> 
             </div> 
         </div> 
