@@ -35,9 +35,8 @@
                             <li><a href="{% url 'store' %}" class="hover:text-blue-600">All Products</a></li>
                         </ul>
                         {% for category in links %}
-                        <ul class="space-y-2 text-gray-600">
+                        <ul class="space-y-2 text-gray-600 mt-2 border-t pt-2">
                             <li><a href="{{ category.get_url }}" class="hover:text-blue-600">{{ category.category_name }}</a></li>
-                            
                         </ul>
                         {% endfor %}
                     </div>

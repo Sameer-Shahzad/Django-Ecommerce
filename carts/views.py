@@ -16,6 +16,8 @@ def _cart_id (request):
     return cart
 
 def add_cart (request, product_id):
+    product = Product.objects.get(id=product_id) 
+    product_variation = []
     if request.method == 'POST':
     #     color = request.POST['color']
     #     size = request.POST['size']
@@ -29,8 +31,8 @@ def add_cart (request, product_id):
                 continue
             
             try:
-                variation = Variation.objects.get(variation_category__iexact=key, variation_value__iexact=value)
-                print(variation)
+                variation = Variation.objects.get(product=product, variation_category__iexact=key, variation_value__iexact=value)
+                product_variation.append(variation)
             except Exception as e:
                 print(f"Error is there: {e}")
                 
@@ -38,7 +40,6 @@ def add_cart (request, product_id):
             
     # return HttpResponse(color + ' ' + size)
     
-    product = Product.objects.get(id=product_id) 
     try:
         cart = Cart.objects.get(cart_id = _cart_id(request))
     except Cart.DoesNotExist:
