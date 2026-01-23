@@ -58,7 +58,7 @@
                                     <p>Out of Stock</p>
                                 </div>
                             {% else %}
-                                {% if in_cart %}
+                                {% comment %} {% if in_cart %}
                                     <a href="#" class="inline-flex items-center justify-center bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-bold shadow-lg cursor-default opacity-90 transition">
                                         <span class="mr-2">Added to Cart ✔</span>
                                     </a>
@@ -66,12 +66,12 @@
                                     <a href="{% url 'cart' %}" class="mx-3 inline-flex items-center justify-center bg-transparent border-2 border-blue-500 text-blue-500 hover:text-blue-700 hover:border-blue-700 px-9 py-3 rounded-lg font-bold transition-all duration-300">
                                         <span class="mr-2">View Cart 🛒</span>
                                     </a>
-                                {% else %}
+                                {% else %} {% endcomment %}
                                     <button type="submit" class="inline-flex items-center justify-center bg-blue-600 text-white px-8 py-3 rounded-lg font-bold hover:bg-blue-700 transition shadow-lg shadow-blue-200">
                                         <span class="mr-2">Add to cart</span>
                                         <i class="fas fa-shopping-cart"></i>
                                     </button>
-                                {% endif %}
+                                {% comment %} {% endif %} {% endcomment %}
                             {% endif %}
                         </article> 
                     </form>
