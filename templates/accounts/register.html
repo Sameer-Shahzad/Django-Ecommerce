@@ -16,16 +16,23 @@
             <form action="{% url 'register' %}" method="POST" class="space-y-5">
                 {% csrf_token %}
                 <!-- {{ form.as_p }} no need for this -->
-                  {% if messages %}
+                 {% if messages %}
                         {% for message in messages %}
-                            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert" style="text-align: center;">
-                                <strong>{{ message }}</strong>
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
+                            <div class="flex items-center justify-between bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg mb-4 max-w-xl mx-auto">
+                                
+                                <strong class="text-center flex-1">
+                                    {{ message }}
+                                </strong>
+
+                                <button onclick="this.parentElement.remove()"
+                                    class="ml-4 text-green-700 hover:text-green-900 font-bold">
+                                    &times;
                                 </button>
+
                             </div>
                         {% endfor %}
                     {% endif %}
+
                                     
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
