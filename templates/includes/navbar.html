@@ -96,17 +96,26 @@
         <div class="flex items-center space-x-6">
           <div class="text-sm">
               <div class="flex items-center space-x-4 font-semibold">
-              <a href="{% url 'login' %}" 
-                class="text-gray-600 hover:text-blue-600 transition-colors duration-300 ease-in-out">
-                Sign in
+                {% if user.is_authenticated %}
+              <a href="{% url 'logout' %}" 
+                class="text-gray-600 transition-colors duration-300 ease-in-out border border-gray-500 px-3 hover:bg-gray-100 py-2 rounded-lg ">
+                LOGOUT 
               </a>
-
+              {% else %}
+              <a href="{% url 'login' %}" 
+                class="text-gray-600 transition-colors duration-300 ease-in-out border border-gray-500 px-3 hover:bg-gray-100 py-2 rounded-lg ">
+                LOGIN
+              </a>
+              {% endif %}
               <span class="h-4 w-[1px] bg-gray-300"></span>
-
+              {% if user.is_authenticated %}
+              <p>Welcome, {{ user.first_name }} {{user.last_name}}</p>
+              {% else %}
               <a href="{% url 'register' %}" 
                 class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 active:scale-95 transition-all duration-200 shadow-sm hover:shadow-md">
                 Register
               </a>
+              {% endif %}
             </div>
           </div>
 
