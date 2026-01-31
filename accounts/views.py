@@ -12,6 +12,7 @@ from django.template.loader import render_to_string
 from django.contrib.sites.shortcuts import get_current_site
 from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import EmailMessage
+from django.http import HttpResponse
 
 # Create your views here.
 
@@ -101,3 +102,7 @@ def logout (request):
     messages.success(request, 'You are logged out.')
     
     return redirect('login')
+
+
+def activate (request, uidb64, token):
+    return HttpResponse("Activate Account")
