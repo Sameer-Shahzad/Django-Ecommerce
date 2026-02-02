@@ -67,8 +67,10 @@ def register(request):
                 to_email = email
                 
                 send_email = EmailMessage (mail_subject, message, to=[to_email])
+
+                send_email.send()
                 
-                messages.success(request, 'Account created successfully!')
+                messages.success(request, 'Thank you for registering with us. We have sent you a verification email to your email address. Please verify to activate your account.')
                 return redirect('register')
             
             
@@ -103,6 +105,22 @@ def logout (request):
     
     return redirect('login')
 
-
-def activate (request, uidb64, token):
-    return HttpResponse("Activate Account")
+def activate(request, uidb64, token):
+    try:
+        uid = urlsafe_base64_decode(uidb64).decode()
+        user = Account._default_manager.get(pk=uid)
+    except (TypeError, ValueError, OverflowError, Account.DoesNotExist):
+        user = None
+        
+    if user is not None and default_token_generator.check_token(user, token):
+        user.is_active = True
+        user.save()
+        messages.success(request, 'Congratulations! Your account is activated.')
+        return redirect('login')
+    else:
+        messages.error(request, 'Invalid activation link')
+        return redirect('register')
+    
+@login_required(login_url='login')
+def dashboard (request):
+    return render (request, 'accounts/dashboard.html')

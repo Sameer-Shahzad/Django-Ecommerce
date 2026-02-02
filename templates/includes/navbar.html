@@ -101,6 +101,10 @@
                 class="text-gray-600 transition-colors duration-300 ease-in-out border border-gray-500 px-3 hover:bg-gray-100 py-2 rounded-lg ">
                 LOGOUT 
               </a>
+              <a href="{% url 'dashboard' %}" 
+                class="text-white transition-colors duration-300 ease-in-out border border-blue-500 px-3 bg-blue-600 hover:bg-blue-700 py-2 rounded-lg ">
+                Dashboard
+              </a>
               {% else %}
               <a href="{% url 'login' %}" 
                 class="text-gray-600 transition-colors duration-300 ease-in-out border border-gray-500 px-3 hover:bg-gray-100 py-2 rounded-lg ">
