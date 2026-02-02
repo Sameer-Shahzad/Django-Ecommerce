@@ -1,3 +1,5 @@
+import os
+import socket
 from django.http import HttpResponseForbidden
 
 class AdminIPRestrictMiddleware:
@@ -5,14 +7,22 @@ class AdminIPRestrictMiddleware:
         self.get_response = get_response
 
     def __call__(self, request):
-        if request.path.startswith('/uCantCMe17/'):
-            allowed_ips = ['127.0.0.1', '::1'] 
+        admin_path = os.getenv('ADMIN_URL_PATH', '')
+
+        if admin_path and request.path.startswith(f'/{admin_path}/'):
+            allowed_ips = ['127.0.0.1', '::1']
             
-            client_ip = request.META.get('REMOTE_ADDR')
-            
-            print(f"Attempting IP: {client_ip}") 
-            
-            if client_ip not in allowed_ips:
-                return HttpResponseForbidden(f"Access Denied: IP {client_ip} not allowed.")
+            try:
+                docker_gateway = socket.gethostbyname('host.docker.internal')
+                allowed_ips.append(docker_gateway)
+            except socket.gaierror:
+                pass
+
+            client_ip = request.META.get('HTTP_X_FORWARDED_FOR', '').split(',')[0].strip() or request.META.get('REMOTE_ADDR')
+
+            is_docker_network = client_ip.startswith('192.168.') or client_ip.startswith('172.')
+
+            if client_ip not in allowed_ips and not is_docker_network:
+                return HttpResponseForbidden("Access Denied.")
         
         return self.get_response(request)
