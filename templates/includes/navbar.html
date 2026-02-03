@@ -93,48 +93,36 @@
           </form>
         </div>
 
-        <div class="flex items-center space-x-6">
-          <div class="text-sm">
-              <div class="flex items-center space-x-4 font-semibold">
-                {% if user.is_authenticated %}
-              <a href="{% url 'logout' %}" 
-                class="text-gray-600 transition-colors duration-300 ease-in-out border border-gray-500 px-3 hover:bg-gray-100 py-2 rounded-lg ">
-                LOGOUT 
-              </a>
-              <a href="{% url 'dashboard' %}" 
-                class="text-white transition-colors duration-300 ease-in-out border border-blue-500 px-3 bg-blue-600 hover:bg-blue-700 py-2 rounded-lg ">
-                Dashboard
-              </a>
-              {% else %}
-              <a href="{% url 'login' %}" 
-                class="text-gray-600 transition-colors duration-300 ease-in-out border border-gray-500 px-3 hover:bg-gray-100 py-2 rounded-lg ">
-                LOGIN
-              </a>
-              {% endif %}
-              <span class="h-4 w-[1px] bg-gray-300"></span>
-              {% if user.is_authenticated %}
-              <p>Welcome, {{ user.first_name }} {{user.last_name}}</p>
-              {% else %}
-              <a href="{% url 'register' %}" 
-                class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 active:scale-95 transition-all duration-200 shadow-sm hover:shadow-md">
-                Register
-              </a>
-              {% endif %}
-            </div>
-          </div>
+        <div class="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-6 w-full md:w-auto mt-4 md:mt-0">
+  
+        <div class="text-sm w-full md:w-auto">
+          <div class="flex flex-wrap justify-center md:justify-start items-center gap-3 font-semibold">
+            {% if user.is_authenticated %}
+              <a href="{% url 'logout' %}" class="text-gray-600 border border-gray-500 px-3 py-2 rounded-lg hover:bg-gray-100">LOGOUT</a>
+              <a href="{% url 'dashboard' %}" class="text-white border border-blue-500 px-3 bg-blue-600 py-2 rounded-lg hover:bg-blue-700">Dashboard</a>
+            {% else %}
+              <a href="{% url 'login' %}" class="text-gray-600 border border-gray-500 px-3 py-2 rounded-lg hover:bg-gray-100">LOGIN</a>
+            {% endif %}
 
-          <a
-            href="{% url 'cart' %}"
-            class="relative p-2 rounded-full border border-gray-200 hover:bg-gray-50 transition"
-          >
+            <span class="hidden md:block h-4 w-[1px] bg-gray-300"></span>
+
+            {% if user.is_authenticated %}
+              <p class="text-center md:text-left">Welcome, {{ user.first_name }}</p>
+            {% else %}
+              <a href="{% url 'register' %}" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Register</a>
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="flex justify-center">
+          <a href="{% url 'cart' %}" class="relative p-2 rounded-full border border-gray-200 hover:bg-gray-50">
             <i class="fa fa-shopping-cart text-gray-600 text-xl"></i>
-            <span
-              class="absolute -top-1 -right-1 bg-red-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold"
-            >
+            <span class="absolute -top-1 -right-1 bg-red-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">
               {{ cart_count }}
             </span>
           </a>
         </div>
+      </div>
       </div>
     </div>
   </section>
