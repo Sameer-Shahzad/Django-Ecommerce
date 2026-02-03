@@ -96,7 +96,7 @@ def login (request):
             return redirect('home')
         else:
             messages.error(request, 'Invalid login credentials')
-            return render('login')
+            return render(request, 'accounts/login.html')
         
     return render(request, 'accounts/login.html')
 
@@ -186,8 +186,10 @@ def resetPassword (request):
         confirm_password = request.POST['confirm_password']
         
         if password == confirm_password:
-            uid = request.session.get('uid')
+            uidb64 = request.session.get('uid')
+            uid = urlsafe_base64_decode(uidb64).decode()
             user = Account.objects.get(pk=uid)
+            
             user.set_password(password)
             user.save() 
             messages.success(request, 'Password reset successful. You can now log in with your new password.')
