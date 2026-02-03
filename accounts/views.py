@@ -177,4 +177,22 @@ def reset_password_validator(request, uidb64, token):
         return redirect('forgotPassword')
        
        
-# def resetPassword (request):  
+def resetPassword (request):
+    if request.user.is_authenticated:
+        return redirect('home')
+    
+    if request.method == 'POST':  
+        password = request.POST['password']
+        confirm_password = request.POST['confirm_password']
+        
+        if password == confirm_password:
+            uid = request.session.get('uid')
+            user = Account.objects.get(pk=uid)
+            user.set_password(password)
+            user.save() 
+            messages.success(request, 'Password reset successful. You can now log in with your new password.')
+            return redirect('login')
+        else:
+            messages.error(request, 'Passwords do not match!')
+            return redirect('resetPassword')
+    return render (request, 'accounts/resetPassword.html')
