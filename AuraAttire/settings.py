@@ -14,6 +14,7 @@ from pathlib import Path
 import os
 
 from dotenv import load_dotenv
+
 load_dotenv()
 
 
@@ -155,3 +156,4 @@ EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 
 EMAIL_USE_TLS = True
 # EMAIL_USE_SSL = False
+# Sahi format ye hai:
