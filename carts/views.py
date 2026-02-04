@@ -6,12 +6,15 @@ from django.http import HttpResponse
 from store.models import Product, Variation
 from .models import Cart, CartItem
 from django.core.exceptions import ObjectDoesNotExist
+from django.contrib.auth.decorators import login_required
 
 def _cart_id (request):
     cart = request.session.session_key
     if not cart:
         cart = request.session.create()
     return cart
+
+
 def add_cart(request, product_id):
     current_user = request.user
     product = Product.objects.get(id=product_id)
@@ -64,6 +67,7 @@ def add_cart(request, product_id):
 
     return redirect('cart')
 
+
 def remove_cart(request, product_id, cart_item_id):
     product = get_object_or_404(Product, id=product_id)
     try:
@@ -82,6 +86,7 @@ def remove_cart(request, product_id, cart_item_id):
         pass
     return redirect('cart')
 
+
 def removeAll_cart(request, product_id, cart_item_id):
     product = get_object_or_404(Product, id=product_id)
     try:
@@ -94,6 +99,7 @@ def removeAll_cart(request, product_id, cart_item_id):
     except:
         pass
     return redirect('cart')
+
 
 def cart (request, total=0, quantity=0, cart_items=None):
     try:
@@ -120,6 +126,8 @@ def cart (request, total=0, quantity=0, cart_items=None):
     }
     return render (request, 'store/cart.html', context)
 
+
+@login_required(login_url='login')
 def checkout(request, total=0, quantity=0, cart_items=None):
     try:
         tax = 0
@@ -146,5 +154,6 @@ def checkout(request, total=0, quantity=0, cart_items=None):
     return render (request, 'store/checkout.html', context)
 
 
+@login_required(login_url='login')
 def place_order(request):
     return HttpResponse("Order Placed Successfully!")

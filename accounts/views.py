@@ -1,4 +1,5 @@
 import re
+from urllib import request
 from django.forms import ValidationError
 from django.shortcuts import redirect, render
 from .models import Account
@@ -13,6 +14,8 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import EmailMessage
 from django.http import HttpResponse
+from carts.models import Cart, CartItem
+from carts.views import _cart_id
 
 # Create your views here.
 
@@ -82,23 +85,45 @@ def register(request):
     }
     return render (request, 'accounts/register.html', context)
 
-def login (request):
+
+def login(request):
     if request.user.is_authenticated:
         return redirect('home')
+    
     if request.method == 'POST':
         email = request.POST.get('email')
         password = request.POST.get('password')
-        
         user = auth.authenticate(request, username=email, password=password)
-            
+
         if user is not None:
+            temp_cart_id = _cart_id(request)
+            
             auth.login(request, user)
+
+            try:
+                cart = Cart.objects.get(cart_id=temp_cart_id)
+                cart_items = CartItem.objects.filter(cart=cart)
+                
+                for item in cart_items:
+                    existing_item = CartItem.objects.filter(user=user, product=item.product).first()
+                    
+                    if existing_item:
+                        existing_item.quantity += item.quantity
+                        existing_item.save()
+                        item.delete() 
+                    else:
+                        item.user = user
+                        item.save()
+            except Cart.DoesNotExist:
+                pass
+
             return redirect('home')
         else:
             messages.error(request, 'Invalid login credentials')
             return render(request, 'accounts/login.html')
-        
+            
     return render(request, 'accounts/login.html')
+
 
 @login_required(login_url='login')
 def logout (request):
@@ -177,24 +202,30 @@ def reset_password_validator(request, uidb64, token):
         return redirect('forgotPassword')
        
        
-def resetPassword (request):
-    if request.user.is_authenticated:
-        return redirect('home')
-    
+def resetPassword(request):
+
     if request.method == 'POST':  
-        password = request.POST['password']
-        confirm_password = request.POST['confirm_password']
+        password = request.POST.get('password')
+        confirm_password = request.POST.get('confirm_password')
         
         if password == confirm_password:
             uidb64 = request.session.get('uid')
-            uid = urlsafe_base64_decode(uidb64).decode()
-            user = Account.objects.get(pk=uid)
-            
-            user.set_password(password)
-            user.save() 
-            messages.success(request, 'Password reset successful. You can now log in with your new password.')
-            return redirect('login')
+        
+            if uidb64:
+                uid = urlsafe_base64_decode(uidb64).decode()
+                user = Account.objects.get(pk=uid)
+                user.set_password(password)
+                user.save() 
+                
+                del request.session['uid']
+                
+                messages.success(request, 'Password reset successful.')
+                return redirect('login')
+            else:
+                messages.error(request, 'Session expired. Please start again.')
+                return redirect('forgotPassword')
         else:
             messages.error(request, 'Passwords do not match!')
             return redirect('resetPassword')
-    return render (request, 'accounts/resetPassword.html')
+            
+    return render(request, 'accounts/resetPassword.html')
