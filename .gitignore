@@ -1,0 +1,7 @@
+.env echo db.sqlite3 echo __pycache__/ echo *.pyc echo env/ echo venv/ echo .DS_Store
+.env echo db.sqlite3 echo __pycache__/ echo *.pyc echo env/ echo venv/ echo .DS_Store
+.env echo db.sqlite3 echo __pycache__/ echo *.pyc echo env/ echo venv/ echo .DS_Store
+.env echo db.sqlite3 echo __pycache__/ echo *.pyc echo env/ echo venv/ echo .DS_Store
+.env echo db.sqlite3 echo __pycache__/ echo *.pyc echo env/ echo venv/ echo .DS_Store
+.env echo db.sqlite3 echo __pycache__/ echo *.pyc echo env/ echo venv/ echo .DS_Store
+.env echo db.sqlite3 echo __pycache__/ echo *.pyc echo env/ echo venv/ echo .DS_Store
