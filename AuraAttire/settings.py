@@ -31,7 +31,10 @@ SECRET_KEY = 'django-insecure-wef#ov)x&0f2#eu#c)7vsh4zwulakq8haqdfs*_30s+l^kang%
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS").split(",")
+# ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS").split(",")
+
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '0.0.0.0', '192.168.18.98']
+
 
 
 # Application definition
@@ -48,6 +51,7 @@ INSTALLED_APPS = [
     'store',
     'carts',
     'widget_tweaks',
+    'orders',
 ]
 
 MIDDLEWARE = [
@@ -58,7 +62,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'accounts.middleware.AdminIPRestrictMiddleware',
+    # 'accounts.middleware.AdminIPRestrictMiddleware',
 ]
 
 ROOT_URLCONF = 'AuraAttire.urls'
@@ -152,8 +156,4 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
-
-
 EMAIL_USE_TLS = True
-# EMAIL_USE_SSL = False
-# Sahi format ye hai:
