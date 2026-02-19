@@ -13,6 +13,7 @@ from decimal import Decimal
 def payments(request):
     return render (request, 'orders/payments.html')
 
+@login_required(login_url='login')
 def place_order(request, quantity=0, total=0):
     current_user = request.user
     
