@@ -100,10 +100,10 @@
                         <img src="{% static 'images/misc/payments.png' %}" alt="payments" class="h-8 object-contain">
                     </div>
                     
-                   <a href="https://sandbox.api.getsafepay.com/components?env=sandbox&beacon={{ safepay_public_key }}&amount={{ grand_total }}&currency=PKR&intent=checkout&order_id={{ order_id }}&redirect_url=http://127.0.0.1:8000/orders/payment_success/" 
-                    class="block w-full bg-blue-600 text-white text-center py-4 mt-4 rounded-lg font-bold shadow-md hover:bg-blue-700 transition-all">
-                    Pay with Safepay
-                    </a>
+               <a href="https://sandbox.api.getsafepay.com/components?env=sandbox&public_key={{ safepay_public_key }}&amount={{ grand_total }}&currency=PKR&intent=checkout&order_id={{ order_id }}&redirect_url=http://127.0.0.1:8000/orders/payment_success/" 
+                class="block w-full bg-blue-600 text-white text-center py-4 mt-4 rounded-lg font-bold shadow-md hover:bg-blue-700 transition-all">
+                Pay with Safepay
+                </a>
                 </div>
             </div>
 

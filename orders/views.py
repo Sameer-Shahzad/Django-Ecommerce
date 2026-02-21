@@ -115,12 +115,15 @@ def place_order(request, quantity=0, total=0):
         data.order_number = order_number
         data.save()
         order = Order.objects.get(user=current_user, is_ordered=False, order_number=order_number)
+        public_key = os.getenv("SAFEPAY_PUBLIC_KEY")
         context = {
             'order': order,
             'cart_items': cart_items,
             'total': total,
             'tax': tax,
-            'grand_total': grand_total,
+            'grand_total': float(order.order_total),
+            'safepay_public_key': public_key,  
+            'order_id': order_number,
         }
         request.session['order_number'] = order_number
         return render(request, 'orders/payments.html', context)
