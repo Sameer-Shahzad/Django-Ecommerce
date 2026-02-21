@@ -68,8 +68,8 @@
                                         {{ cart_item.quantity }}
                                     </td>
                                     <td class="text-right">
-                                        <div class="font-bold text-gray-900">${{ cart_item.sub_total }}</div>
-                                        <small class="text-gray-400 text-xs">${{ cart_item.product.price }} each</small>
+                                        <div class="font-bold text-gray-900">{{ cart_item.sub_total }}</div>
+                                        <small class="text-gray-400 text-xs">{{ cart_item.product.price }} each</small>
                                     </td>
                                 </tr>
                                 {% endfor %}
@@ -100,12 +100,10 @@
                         <img src="{% static 'images/misc/payments.png' %}" alt="payments" class="h-8 object-contain">
                     </div>
                     
-                   <div class="mt-6">
-                        <a href="https://sandbox.api.getsafepay.com/components?env=sandbox&beacon={{ safepay_public_key }}&amount={{ grand_total }}&currency=PKR&intent=checkout&order_id={{ order_id }}&redirect_url=http://127.0.0.1:8000/orders/payment-success/" 
-                        class="block w-full bg-blue-600 text-white text-center py-4 rounded-lg font-bold shadow-md hover:bg-blue-700 transition-all">
-                        Pay with Safepay
-                        </a>
-                    </div>
+                   <a href="https://sandbox.api.getsafepay.com/components?env=sandbox&beacon={{ safepay_public_key }}&amount={{ grand_total }}&currency=PKR&intent=checkout&order_id={{ order_id }}&redirect_url=http://127.0.0.1:8000/orders/payment_success/" 
+                    class="block w-full bg-blue-600 text-white text-center py-4 mt-4 rounded-lg font-bold shadow-md hover:bg-blue-700 transition-all">
+                    Pay with Safepay
+                    </a>
                 </div>
             </div>
 
