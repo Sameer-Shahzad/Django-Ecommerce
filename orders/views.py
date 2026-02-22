@@ -1,7 +1,7 @@
 import os
 
 from django.shortcuts import redirect, render
-
+from django.conf import settings
 # Create your views here.
 from .models import Payment, Order, OrderProduct
 from carts.models import CartItem
@@ -28,7 +28,7 @@ def payments(request):
             'total': order.order_total - order.tax,
             'tax': order.tax,
             'grand_total': order.order_total,
-            'safepay_public_key': public_key,
+            'safepay_public_key': settings.SAFEPAY_PUBLIC_KEY,
             'order_id': order.order_number,
         }
         

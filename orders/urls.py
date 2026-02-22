@@ -8,3 +8,4 @@ urlpatterns = [
     path ('payments/', views.payments, name='payments'),
     path('payment-success/', views.payment_success, name='payment_success'),
 ]
+
