@@ -12,7 +12,7 @@ import datetime
 from decimal import Decimal
 
 def payments(request):
-    # Get the current order from session
+
     order_number = request.session.get('order_number')
     
     try:
