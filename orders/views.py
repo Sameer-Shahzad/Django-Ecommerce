@@ -11,35 +11,25 @@ from django.contrib.auth.decorators import login_required
 import datetime
 from decimal import Decimal
 
-
 def payments(request):
+    # Get the current order from session
     order_number = request.session.get('order_number')
     
     try:
         order = Order.objects.get(order_number=order_number, is_ordered=False)
         cart_items = CartItem.objects.filter(user=request.user)
         
-        checkout_url = "https://sandbox.api.getsafepay.com/components"
-        public_key = os.getenv("SAFEPAY_PUBLIC_KEY")
-        tax = order.tax
-        total = order.order_total - tax
-        grand_total = order.order_total
-        
         context = {
             'order': order,
             'cart_items': cart_items,
-            'total': total,
-            'tax': tax,
-            'grand_total': float(order.order_total),
-            'safepay_public_key': public_key,  
-            'order_id': order_number,
+            'total': order.order_total - order.tax,
+            'tax': order.tax,
+            'grand_total': order.order_total,
         }
-        
         return render(request, 'orders/payments.html', context)
-        
+    
     except Order.DoesNotExist:
         return redirect('checkout')
-    
 
 def payment_success(request):
     order_number = request.GET.get('order_id')
