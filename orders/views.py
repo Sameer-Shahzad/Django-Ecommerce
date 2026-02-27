@@ -21,15 +21,18 @@ def payments(request):
         
         checkout_url = "https://sandbox.api.getsafepay.com/components"
         public_key = os.getenv("SAFEPAY_PUBLIC_KEY")
+        tax = order.tax
+        total = order.order_total - tax
+        grand_total = order.order_total
         
         context = {
             'order': order,
             'cart_items': cart_items,
-            'total': order.order_total - order.tax,
-            'tax': order.tax,
-            'grand_total': order.order_total,
-            'safepay_public_key': settings.SAFEPAY_PUBLIC_KEY,
-            'order_id': order.order_number,
+            'total': total,
+            'tax': tax,
+            'grand_total': float(order.order_total),
+            'safepay_public_key': public_key,  
+            'order_id': order_number,
         }
         
         return render(request, 'orders/payments.html', context)

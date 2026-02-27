@@ -97,48 +97,66 @@
                         <img src="{% static 'images/misc/payments.png' %}" alt="payments" class="h-8 object-contain">
                     </div>
 
-                    <button type="button" id="safepay-btn"
-                        class="block w-full bg-blue-600 text-white text-center py-4 mt-4 rounded-lg font-bold shadow-md hover:bg-blue-700 transition-all">
-                        Pay with Safepay
-                    </button>
+                   <button type="button"
+    onclick="makeSafepayPayment()"
+    class="block w-full bg-blue-600 text-white py-4 mt-4 rounded-lg font-bold shadow-md hover:bg-blue-700 transition-all">
+    Pay with Safepay
+</button>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
+
+
+
+
+
 <!-- Safepay SDK -->
-
-
- <script>
+<script>
 function makeSafepayPayment() {
+    // Ensure Safepay key is present
     const apiKey = "{{ safepay_public_key }}";
-    const amount = "{{ grand_total|floatformat:2 }}";
+    if (!apiKey) {
+        alert("Safepay public key missing!");
+        return;
+    }
+
+    // Ensure amount is numeric and fixed to 2 decimals
+    const amount = parseFloat("{{ grand_total|floatformat:2 }}").toFixed(2);
+    if (isNaN(amount) || amount <= 0) {
+        alert("Invalid amount for payment!");
+        return;
+    }
+
     const currency = "PKR";
     const orderId = "{{ order_id }}";
-    
 
-    const baseUrl = "https://sandbox.api.getsafepay.com/checkout/render";
-    
+    // Build full redirect URLs safely
+  
+
+    const redirectUrl = "https://abcd1234.ngrok.io/orders/payment_success/?order_id=" + orderId;
+const cancelUrl = "https://abcd1234.ngrok.io/orders/payments/";
+
     const params = new URLSearchParams({
-        environment: 'sandbox', 
+        environment: 'sandbox',
         beacon: apiKey,
         amount: amount,
         currency: currency,
         track: orderId,
         source: 'custom',
-        redirect_url: window.location.origin + "/orders/payment_success/?order_id=" + orderId,
-        cancel_url: window.location.origin + "/orders/payments/"
+        redirect_url: redirectUrl,
+        cancel_url: cancelUrl
     });
 
-    const finalUrl = `${baseUrl}?${params.toString()}`;
-    
-    console.log("Redirecting to:", finalUrl);
+    const finalUrl = `https://sandbox.api.getsafepay.com/checkout/render?${params.toString()}`;
+    console.log("Redirecting to Safepay:", finalUrl);
+
+    // Redirect to Safepay checkout
     window.location.href = finalUrl;
 }
 </script>
-
-
 
 
 
