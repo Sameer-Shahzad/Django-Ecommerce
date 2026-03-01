@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Payment Successful</title>
+</head>
+<body class="bg-gray-100 font-sans">
+
+    <div class="max-w-3xl mx-auto py-12 px-4">
+        
+        <div class="text-center mb-10">
+            <div class="flex justify-center mb-4">
+                <div class="bg-green-500 text-white rounded-full p-4 shadow-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
+                    </svg>
+                </div>
+            </div>
+            <h1 class="text-3xl font-bold text-gray-800">Payment Successful</h1>
+            <a href="{% url 'store' %}" class="inline-block mt-4 bg-green-600 text-white px-6 py-2 rounded-md hover:bg-green-700 transition-colors">
+                Shop more
+            </a>
+        </div>
+
+        <div class="bg-white shadow-xl rounded-lg overflow-hidden border border-gray-200">
+            
+            <div class="p-8 flex justify-between items-start border-bottom border-gray-100">
+                <div>
+                    <h2 class="text-2xl font-bold text-gray-400 italic">Aura Attire</h2>
+
+
+                    <div class="mt-6 text-sm text-gray-600">
+                        <p class="font-bold text-gray-800">Order # {{ order.order_number }}</p>
+                        <p>Transaction # {{ payment_id }}</p>
+                        <p>Order Date: {{ order.created_at }}</p>
+                        <p>Status: <span class="text-green-600 font-bold uppercase">Paid</span></p>
+                    </div>
+                </div>
+                <div class="text-right text-sm text-gray-600 leading-relaxed">
+                    <p class="font-bold text-gray-800 uppercase tracking-wider">Invoiced To</p>
+                    <p>{{ order.full_name }}</p>
+                    <p>{{ order.address_line_1 }}</p>
+                    <p>{{ order.city }}, {{ order.state }}</p>
+                    <p>{{ order.country }}</p>
+                </div>
+            </div>
+
+            <div class="px-8 py-3 bg-gray-50 border-y border-gray-200 grid grid-cols-4 font-bold text-gray-700 text-sm">
+                <div class="col-span-2">Description</div>
+                <div class="text-center">Qty</div>
+                <div class="text-right">Total</div>
+            </div>
+
+            <div class="px-8 py-4 divide-y divide-gray-100">
+                {% for item in order_products %}
+                <div class="grid grid-cols-4 py-4 text-sm text-gray-600">
+                    <div class="col-span-2">
+                        <p class="font-bold text-gray-800">{{ item.product.product_name }}</p>
+                        <p class="text-xs text-gray-400">
+                            {% if item.variations.all %}
+                                {% for v in item.variations.all %} {{ v.variation_value }} {% endfor %}
+                            {% endif %}
+                        </p>
+                    </div>
+                    <div class="text-center">{{ item.quantity }}</div>
+                    <div class="text-right">${{ item.product_price }} USD</div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="p-8 bg-gray-50 border-t border-gray-200">
+                <div class="flex justify-end mb-2">
+                    <div class="w-full max-w-xs flex justify-between text-sm">
+                        <span class="font-bold text-gray-700">Sub Total:</span>
+                        <span class="text-gray-600">${{ subtotal }} USD</span>
+                    </div>
+                </div>
+                <div class="flex justify-end mb-4">
+                    <div class="w-full max-w-xs flex justify-between text-sm">
+                        <span class="font-bold text-gray-700">Tax:</span>
+                        <span class="text-gray-600">${{ order.tax }} USD</span>
+                    </div>
+                </div>
+                <div class="flex justify-end">
+                    <div class="w-full max-w-xs flex justify-between border-t border-gray-300 pt-2">
+                        <span class="text-lg font-bold text-gray-800">Grand Total:</span>
+                        <span class="text-lg font-bold text-green-600 font-mono">${{ order.order_total }} USD</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <p class="text-center text-xs text-gray-400 mt-8">
+            Thank you for shopping with us! If you have any questions, contact support.
+        </p>
+    </div>
+
+</body>
+</html>
+
+
+{% endblock %}
+
+

@@ -1,3 +1,5 @@
+import email
+from email.message import EmailMessage
 import os
 import datetime
 from decimal import Decimal
@@ -6,6 +8,14 @@ from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from .models import Payment, Order, OrderProduct
 from carts.models import CartItem
+from accounts.models import Account
+from django.core.mail import EmailMessage
+from django.template.loader import render_to_string
+from django.contrib.sites.shortcuts import get_current_site
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding import force_bytes, force_str
+from django.contrib.auth.tokens import default_token_generator  
+from store.models import Product, Variation
 
 @login_required(login_url='login')
 def place_order(request):
@@ -57,9 +67,10 @@ def place_order(request):
     else:
         return redirect('checkout')
 
+
+
 def payments(request):
     order_number = request.session.get('order_number')
-    
     try:
         order = Order.objects.get(order_number=order_number, is_ordered=False)
         cart_items = CartItem.objects.filter(user=request.user)
@@ -74,13 +85,13 @@ def payments(request):
                 order_product.product_price = item.product.price
                 order_product.ordered = False 
                 order_product.save()
-
-                product_variation = item.variation.all()
-                order_product.variation.set(product_variation)
+                
+                product_variation = item.variations.all()
+                order_product.variations.set(product_variation)
                 order_product.save()
 
+
         public_key = os.getenv("SAFEPAY_PUBLIC_KEY")
-        
         context = {
             'order': order,
             'cart_items': cart_items,
@@ -91,9 +102,9 @@ def payments(request):
             'order_id': order_number,
         }
         return render(request, 'orders/payments.html', context)
-    
     except Order.DoesNotExist:
         return redirect('checkout')
+    
 
 def payment_success(request):
     order_number = request.GET.get('order_id')
@@ -120,18 +131,39 @@ def payment_success(request):
         for item in order_products:
             item.ordered = True
             item.save()
+            
+            product = item.product
+            product.stock -= item.quantity
+            product.save()
 
         CartItem.objects.filter(user=request.user).delete()
+
+        mail_subject = 'Thank you for your order!'
+        message = render_to_string('orders/order_complete_email.html', {
+            'user': request.user,
+            'order': order,
+        })
+        to_email = request.user.email
+        send_email = EmailMessage(mail_subject, message, to=[to_email])
+        send_email.send()
 
         context = {
             'order': order,
             'payment_id': payment_id,
+            'order_products': order_products,
         }
         return render(request, 'orders/order_complete.html', context)
 
     except Order.DoesNotExist:
         return redirect('home')
     
-
+    
 def order_complete(request):
     pass
+
+
+
+def order_complete(request):
+   
+    return render(request, 'orders/order_complete.html')
+    

@@ -1,0 +1,9 @@
+{% autoescape on %}
+
+Hi {{user.first_name}},
+
+Your order has been successfully placed! Here are the details of your order:
+Order Number: {{ order.order_number }}
+Order Total: ${{ order.order_total }}
+
+{% endautoescape %} 
