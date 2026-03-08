@@ -16,6 +16,11 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
 from django.contrib.auth.tokens import default_token_generator  
 from store.models import Product, Variation
+import hashlib
+import hmac
+import stripe
+stripe.api_key = os.getenv('STRIPE_SECRET_KEY')
+from django.views.decorators.csrf import csrf_exempt
 
 @login_required(login_url='login')
 def place_order(request):
@@ -73,42 +78,32 @@ def payments(request):
     order_number = request.session.get('order_number')
     try:
         order = Order.objects.get(order_number=order_number, is_ordered=False)
-        cart_items = CartItem.objects.filter(user=request.user)
         
-        for item in cart_items:
-            if not OrderProduct.objects.filter(order=order, product=item.product).exists():
-                order_product = OrderProduct()
-                order_product.order = order
-                order_product.user = request.user
-                order_product.product = item.product
-                order_product.quantity = item.quantity
-                order_product.product_price = item.product.price
-                order_product.ordered = False 
-                order_product.save()
-                
-                product_variation = item.variations.all()
-                order_product.variations.set(product_variation)
-                order_product.save()
+        checkout_session = stripe.checkout.Session.create(
+            payment_method_types=['card'],
+            line_items=[{
+                'price_data': {
+                    'currency': 'pkr', 
+                    'product_data': {'name': f'Order #{order.order_number}'},
+                    'unit_amount': int(order.order_total * 100), 
+                },
+                'quantity': 1,
+            }],
+            mode='payment',
+            success_url=request.build_absolute_uri('/orders/payment-success/') + f'?order_id={order.order_number}&session_id={{CHECKOUT_SESSION_ID}}',
+            cancel_url=request.build_absolute_uri('/orders/payments/'),
+        )
+        
+        return redirect(checkout_session.url, code=303)
 
-
-        public_key = os.getenv("SAFEPAY_PUBLIC_KEY")
-        context = {
-            'order': order,
-            'cart_items': cart_items,
-            'total': order.order_total - order.tax,
-            'tax': order.tax,
-            'grand_total': order.order_total,
-            'safepay_public_key': public_key,
-            'order_id': order_number,
-        }
-        return render(request, 'orders/payments.html', context)
     except Order.DoesNotExist:
-        return redirect('checkout')
-    
+        return redirect('home')
+
+
 
 def payment_success(request):
     order_number = request.GET.get('order_id')
-    payment_id = request.GET.get('tracker') 
+    payment_id = request.GET.get('session_id') 
 
     try:
         order = Order.objects.get(order_number=order_number, is_ordered=False)
@@ -116,7 +111,7 @@ def payment_success(request):
         payment = Payment(
             user = request.user,
             payment_id = payment_id,
-            payment_method = 'Safepay',
+            payment_method = 'Stripe',
             amount_paid = order.order_total,
             status = 'Completed',
         )
@@ -132,13 +127,13 @@ def payment_success(request):
             item.ordered = True
             item.save()
             
-            product = item.product
+            product = Product.objects.get(id=item.product_id)
             product.stock -= item.quantity
             product.save()
 
         CartItem.objects.filter(user=request.user).delete()
 
-        mail_subject = 'Thank you for your order!'
+        mail_subject = 'WWE Portal - Order Confirmed!'
         message = render_to_string('orders/order_complete_email.html', {
             'user': request.user,
             'order': order,
@@ -152,18 +147,30 @@ def payment_success(request):
             'payment_id': payment_id,
             'order_products': order_products,
         }
-        return render(request, 'orders/order_complete.html', context)
+        return redirect(f'/orders/order-complete/?order_id={order_number}&session_id={payment_id}')
+    
 
+    except (Order.DoesNotExist, Exception) as e:
+        print(f"Error: {e}")
+        return redirect('home')
+
+
+
+
+def order_complete(request):
+    order_number = request.GET.get('order_id')
+    payment_id = request.GET.get('session_id')
+
+    try:
+
+        order = Order.objects.get(order_number=order_number, is_ordered=True)
+        ordered_products = OrderProduct.objects.filter(order=order)
+
+        context = {
+            'order': order,
+            'ordered_products': ordered_products,
+            'payment_id': payment_id,
+        }
+        return render(request, 'orders/order_complete.html', context)
     except Order.DoesNotExist:
         return redirect('home')
-    
-    
-def order_complete(request):
-    pass
-
-
-
-def order_complete(request):
-   
-    return render(request, 'orders/order_complete.html')
-    

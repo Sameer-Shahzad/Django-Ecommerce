@@ -97,11 +97,12 @@
                         <img src="{% static 'images/misc/payments.png' %}" alt="payments" class="h-8 object-contain">
                     </div>
 
-                   <button type="button"
-                        onclick="makeSafepayPayment()"
-                        class="block w-full bg-blue-600 text-white py-4 mt-4 rounded-lg font-bold shadow-md hover:bg-blue-700 transition-all">
-                        Pay with Safepay
-                    </button>
+                   <div class="mt-6">
+                        <a href="{% url 'payments' %}" 
+                            class="block w-full bg-blue-600 text-white text-center py-4 rounded-lg font-bold shadow-md hover:bg-blue-700 transition-all">
+                            Pay with Credit Card (Stripe)
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>

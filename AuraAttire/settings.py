@@ -14,13 +14,12 @@ from pathlib import Path
 import os
 
 from dotenv import load_dotenv
-from tests import settings
 
 load_dotenv()
 
-SAFEPAY_PUBLIC_KEY = os.getenv('SAFEPAY_PUBLIC_KEY')
-SAFEPAY_SECRET_KEY = os.getenv('SAFEPAY_SECRET_KEY')
 
+STRIPE_PUBLISHABLE_KEY = os.getenv('STRIPE_PUBLISHABLE_KEY')
+STRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY')
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -33,11 +32,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DEBUG', 'False') == 'True'
+DEBUG = True
 
 # ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS").split(",")
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '0.0.0.0', '192.168.18.98']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 
 
