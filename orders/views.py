@@ -22,6 +22,7 @@ import stripe
 stripe.api_key = os.getenv('STRIPE_SECRET_KEY')
 from django.views.decorators.csrf import csrf_exempt
 
+
 @login_required(login_url='login')
 def place_order(request):
     current_user = request.user
@@ -33,10 +34,13 @@ def place_order(request):
     
     grand_total = 0
     tax = 0
+    total = 0
     for cart_item in cart_items:
-        total = (cart_item.product.price * cart_item.quantity)
-        grand_total += total
-        tax += (total * Decimal("0.02"))
+        total += (cart_item.product.price * cart_item.quantity)
+        cart_item.sub_total = cart_item.product.price * cart_item.quantity 
+    
+    tax = (total * Decimal("0.02"))
+    grand_total = total + tax
     
     if request.method == 'POST':
         data = Order()
@@ -65,15 +69,39 @@ def place_order(request):
         data.order_number = order_number
         data.save()
 
+        for item in cart_items:
+            order_product = OrderProduct()
+            order_product.order_id = data.id
+            order_product.user_id = request.user.id
+            order_product.product_id = item.product_id
+            order_product.quantity = item.quantity
+            order_product.product_price = item.product.price
+            order_product.ordered = False
+            order_product.save()
+
+            cart_item = CartItem.objects.get(id=item.id)
+            product_variation = cart_item.variations.all()
+            order_product = OrderProduct.objects.get(id=order_product.id)
+            order_product.variations.set(product_variation)
+            order_product.save()
+
         request.session['order_number'] = order_number
+    
+        context = {
+            'order': data,
+            'cart_items': cart_items,
+            'total': total,
+            'tax': tax,
+            'grand_total': grand_total,
+        }
         
-        return redirect('payments')
+        return render(request, 'orders/payments.html', context)
     
     else:
         return redirect('checkout')
-
-
-
+    
+    
+    
 def payments(request):
     order_number = request.session.get('order_number')
     try:
@@ -133,7 +161,7 @@ def payment_success(request):
 
         CartItem.objects.filter(user=request.user).delete()
 
-        mail_subject = 'WWE Portal - Order Confirmed!'
+        mail_subject = 'Order Confirmed!'
         message = render_to_string('orders/order_complete_email.html', {
             'user': request.user,
             'order': order,
@@ -148,7 +176,6 @@ def payment_success(request):
             'order_products': order_products,
         }
         return redirect(f'/orders/order-complete/?order_id={order_number}&session_id={payment_id}')
-    
 
     except (Order.DoesNotExist, Exception) as e:
         print(f"Error: {e}")
