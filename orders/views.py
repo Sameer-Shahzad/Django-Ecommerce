@@ -152,6 +152,7 @@ def payment_success(request):
 
         order_products = OrderProduct.objects.filter(order=order)
         for item in order_products:
+            item.payment = payment
             item.ordered = True
             item.save()
             
