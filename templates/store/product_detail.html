@@ -117,26 +117,42 @@
             </form>
         </div>
 
-        <div class="mt-12 max-w-4xl">
-            <header class="mb-6">
-                <h3 class="text-xl font-bold text-gray-800">Customer Reviews</h3>  
-            </header>
+       <div class="mt-12 max-w-4xl">
+    <header class="mb-6">
+        <h3 class="text-xl font-bold text-gray-800">Customer Reviews</h3>  
+    </header>
 
+    {% if not reviews %}
+        <p class="text-gray-500 italic">No reviews yet. Be the first to review this product!</p>
+    {% else %}
+        {% for review in reviews %}
             <article class="p-6 bg-white rounded-lg border border-gray-100 shadow-sm mb-4">
                 <div class="flex items-center justify-between mb-4">
                     <div class="flex items-center">
-                        <img src="{% static 'images/avatars/avatar1.jpg' %}" class="w-10 h-10 rounded-full mr-3 border border-gray-200">
+                        <div class="bg-blue-100 w-10 h-10 rounded-full flex items-center justify-center mr-3 border border-blue-200">
+                            <span class="text-blue-600 font-bold uppercase">{{ review.user.first_name|slice:":1" }}</span>
+                        </div>
                         <div>
-                            <h6 class="font-bold text-gray-800 text-sm">Mike John</h6>
-                            <span class="text-xs text-gray-400">24.04.2020</span>
+                            <h6 class="font-bold text-gray-800 text-sm">{{ review.user.full_name }}</h6>
+                            <span class="text-xs text-gray-400">{{ review.updated_at }}</span>
                         </div>
                     </div>
+                    <div class="text-yellow-400 text-xs">
+                        Rating: {{ review.rating }} ★
+                    </div>
                 </div>
+                
+                <div class="mb-2">
+                    <h6 class="font-bold text-gray-700 text-sm">{{ review.subject }}</h6>
+                </div>
+
                 <div class="text-gray-600 text-sm leading-relaxed italic">
-                    "Dummy comment Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+                    "{{ review.review }}"
                 </div>
             </article>
-        </div>
+        {% endfor %}
+    {% endif %}
+</div>
 
     </div> 
 </section>
