@@ -202,3 +202,16 @@ def order_complete(request):
         return render(request, 'orders/order_complete.html', context)
     except Order.DoesNotExist:
         return redirect('home')
+    
+    
+    
+    
+    
+def privacy_policy(request):
+    return render(request, 'orders/privacy_policy.html')
+
+def support(request):   
+    return render(request, 'orders/support.html')
+
+def terms_of_service(request):
+    return render(request, 'orders/terms_of_service.html')

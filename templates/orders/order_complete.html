@@ -96,8 +96,13 @@
             </div>
         </div>
 
-        <div class="mt-12 text-center">
-            <p class="text-sm text-slate-500">A copy of this receipt has been sent to <span class="text-blue-600 font-bold">{{ order.email }}</span></p>
+       <div class="mt-10 text-center space-y-4">
+            <p class="text-sm text-gray-500">A confirmation email has been sent to <span class="font-bold text-gray-700">{{ order.email }}</span></p>
+            <div class="flex justify-center space-x-6 text-xs font-bold text-indigo-600 uppercase tracking-widest">
+                <a href={% url 'support' %} class="hover:text-indigo-800">Support</a>
+                <a href={% url 'privacy_policy' %} class="hover:text-indigo-800">Privacy Policy</a>
+                <a href={% url 'terms_of_service' %} class="hover:text-indigo-800">Terms of Service</a>
+            </div>
         </div>
     </div>
 </div>

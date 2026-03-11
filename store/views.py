@@ -1,5 +1,5 @@
-from django.shortcuts import render
-from .models import Product
+from django.shortcuts import redirect, render
+from .models import Product, ReviewRating
 from category.models import Category
 from django.shortcuts import get_object_or_404
 
@@ -36,17 +36,23 @@ def store(request, category_slug = None):
     }
     return render(request, 'store/store.html', context)
 
-def product_detail (request, category_slug, product_slug):
+
+def product_detail(request, category_slug, product_slug):
     try:
-        single_product = Product.objects.get( category__slug=category_slug, slug=product_slug )
+        single_product = Product.objects.get(category__slug=category_slug, slug=product_slug)
         in_cart = CartItem.objects.filter(cart__cart_id=_cart_id(request), product=single_product).exists()
     except Exception as e:
         raise e
+
+    reviews = ReviewRating.objects.filter(product_id=single_product.id, status=True)
+
     context = {
         'single_product': single_product,
         'in_cart': in_cart,
+        'reviews': reviews, 
     }
-    return render (request, 'store/product_detail.html', context)
+    return render(request, 'store/product_detail.html', context)
+
 
 def search(request):
     products = None 
@@ -63,3 +69,28 @@ def search(request):
         'products': products,
     }
     return render(request, 'store/store.html', context)
+
+
+
+
+def submit_review(request, product_id):
+    url = request.META.get('HTTP_REFERER')
+    if request.method == 'POST':
+        try:
+            reviews = ReviewRating.objects.get(user__id=request.user.id, product__id=product_id)
+            review = reviews
+            review.subject = request.POST['subject']
+            review.review = request.POST['review']
+            review.rating = request.POST['rating']
+            review.save()
+            return redirect(url)
+        except ReviewRating.DoesNotExist:
+            review = ReviewRating.objects.create(
+                user_id=request.user.id,
+                product_id=product_id,
+                subject=request.POST['subject'],
+                review=request.POST['review'],
+                rating=request.POST['rating'],
+            )
+            review.save()
+            return redirect(url)
