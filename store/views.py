@@ -8,6 +8,7 @@ from carts.views import _cart_id
 from carts.models import CartItem
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator    
 from django.db.models import Q
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
@@ -72,7 +73,7 @@ def search(request):
 
 
 
-
+login_required(login_url='login')
 def submit_review(request, product_id):
     url = request.META.get('HTTP_REFERER')
     if request.method == 'POST':
