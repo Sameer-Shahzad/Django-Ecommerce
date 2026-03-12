@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'carts',
     'widget_tweaks',
     'orders',
+    'admin_honeypot',
 ]
 
 MIDDLEWARE = [
@@ -66,7 +67,12 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     # 'accounts.middleware.AdminIPRestrictMiddleware',
+    'django_session_timeout.middleware.SessionTimeoutMiddleware',
 ]
+
+SESSION_EXPIRE_SECONDS = 3600 # There is no need for this in an ecommerce app, but i am doing for learning purpose only 
+SESSION_EXPIRE_AFTER_LAST_ACTIVITY = True
+SESSION_TIMEOUT_REDIRECT = '/accounts/login/'
 
 ROOT_URLCONF = 'AuraAttire.urls'
 

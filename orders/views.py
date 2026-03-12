@@ -215,3 +215,15 @@ def support(request):
 
 def terms_of_service(request):
     return render(request, 'orders/terms_of_service.html')
+
+@login_required(login_url='login')
+def dashboard(request):
+
+    orders = Order.objects.order_by('-created_at').filter(user=request.user, is_ordered=True)
+    orders_count = orders.count() 
+
+    context = {
+        'orders': orders,
+        'orders_count': orders_count,
+    }
+    return render(request, 'accounts/dashboard.html', context)

@@ -9,37 +9,49 @@
         <img src="{% static 'images/banners/banner.png' %}" class="rounded w-full h-72 object-cover">
     </div>
 </section>
-
-<!-- POPULAR PRODUCTS -->
-<section class="py-6">
+<section class="py-10 bg-gray-50">
     <div class="max-w-7xl mx-auto px-4">
 
-        <div class="flex justify-between items-center mb-4">
-            <h3 class="text-2xl font-semibold">Popular products</h3>
-            <a href="{% url 'store' %}" class="border border-blue-600 text-blue-600 px-4 py-1 rounded">See all</a>
+        <div class="flex justify-between items-end mb-8">
+            <div>
+                <h3 class="text-3xl font-black text-gray-900 tracking-tight">Popular Products</h3>
+                <p class="text-gray-500 text-sm mt-1">Our most loved items this week.</p>
+            </div>
+            <a href="{% url 'store' %}" class="group text-blue-600 font-bold flex items-center gap-2 transition-all hover:gap-3">
+                See all products <i class="fas fa-arrow-right text-sm"></i>
+            </a>
         </div>
 
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-
-            <!-- CARD -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {% for product in products %}
-            <div class="border rounded p-3 hover:shadow-md">
+            <div class="group relative bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300 overflow-hidden flex flex-col h-full">
                 
-                {% if product.product_image %}
-                    <a href="{{ product.get_url }}"><img src="{{ product.product_image.url }}" class="w-full h-48 object-cover rounded"></a>
-                {% endif %}  
-                    <a href="{{ product.get_url }}" class="mt-2 text-gray-700">{{ product.product_name }}</a>
-                    <p class="font-semibold">${{ product.price }}</p>
+                <div class="relative aspect-square overflow-hidden bg-gray-100">
+                    {% if product.product_image %}
+                        <a href="{{ product.get_url }}">
+                            <img src="{{ product.product_image.url }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                        </a>
+                    {% endif %}
+                </div>
+                
+                <div class="p-5 flex flex-col flex-grow">
+                    <div class="mb-1">
+                        <span class="text-[10px] font-bold text-blue-600 uppercase tracking-widest">{{ product.category }}</span>
+                    </div>
+                    
+                    <a href="{{ product.get_url }}" class="text-gray-800 font-bold text-lg hover:text-blue-600 transition-colors line-clamp-1 mb-2">
+                        {{ product.product_name }}
+                    </a>
+                    
+                    <div class="mt-auto">
+                        <p class="text-xl font-black text-gray-900">${{ product.price }}</p>
+                    </div>
+                </div>
             </div>
             {% endfor %}
-
-            </div>
-
         </div>
-
     </div>
 </section>
-
 </body>
 
 </html>

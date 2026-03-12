@@ -7,3 +7,5 @@ python-dotenv==1.2.1
 sqlparse==0.5.3
 psycopg2-binary==2.9.7
 stripe==11.4.0
+django-admin-honeypot-updated-2021
+django-session-timeout

@@ -3,138 +3,121 @@
 
 {% block content %}
 
-<section class="relative py-10 bg-gray-100 overflow-hidden shadow-inner">
-    <div class="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
+<section class="relative py-16 bg-white overflow-hidden border-b border-gray-100">
+    <div class="absolute top-0 left-0 w-full h-full opacity-5 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
     
-    <div class="container mx-auto px-4 relative z-10">
+    <div class="container mx-auto px-4 relative z-10 text-center">
         {% if 'search' in request.GET %}
-        <h2 class="title-page font-extrabold text-center text-4xl md:text-2xl text-gray-800 tracking-tight uppercase">
-            Search Results for <span class="text-blue-600">{{ request.GET.search }}</span>
-        </h2>
+            <span class="text-blue-600 font-bold uppercase tracking-widest text-xs">Search Results</span>
+            <h2 class="mt-2 font-black text-4xl md:text-5xl text-gray-900 tracking-tight">
+                "{{ request.GET.search }}"
+            </h2>
         {% else %}
-        <h2 class="title-page font-extrabold text-center text-4xl md:text-5xl text-gray-800 tracking-tight uppercase">
-            Our <span class="text-blue-600">Store</span>
-             <div class="w-24 h-1 bg-blue-600 mx-auto mt-4 rounded-full"></div>
-            <p class="text-center text-gray-500 mt-2 text-sm italic">Explore our latest premium collection</p>
-        </h2>
+            <span class="text-blue-600 font-bold uppercase tracking-widest text-xs">Premium Collection</span>
+            <h2 class="mt-2 font-black text-4xl md:text-6xl text-gray-900 tracking-tight uppercase">
+                Our <span class="text-blue-600">Store</span>
+            </h2>
+            <p class="text-gray-500 mt-4 text-lg max-w-xl mx-auto">Discover the perfect blend of style and quality in our curated shop.</p>
         {% endif %}
-       
     </div> 
 </section>
 
-<section class="py-10 bg-gray-50">
+<section class="py-12 bg-gray-50">
     <div class="max-w-7xl mx-auto px-4">
-        <div class="flex flex-col md:flex-row gap-8">
+        <div class="flex flex-col md:flex-row gap-10">
             
-            <aside class="w-full md:w-1/4">
-                <div class="bg-white border rounded shadow-sm overflow-hidden">
+            <aside class="w-full md:w-1/4 space-y-6">
+                <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
                     
-                    <div class="border-b p-4">
-                        <h6 class="font-bold mb-3 uppercase text-xs text-gray-500">Categories</h6>
-                        <ul class="space-y-2 text-gray-600">
-                            <li><a href="{% url 'store' %}" class="hover:text-blue-600">All Products</a></li>
+                    <div class="mb-8">
+                        <h6 class="font-black mb-4 uppercase text-[10px] tracking-[0.2em] text-gray-400">Categories</h6>
+                        <ul class="space-y-3">
+                            <li><a href="{% url 'store' %}" class="text-gray-900 font-bold hover:text-blue-600 transition flex items-center gap-2">
+                                <span class="w-1.5 h-1.5 rounded-full bg-blue-600"></span> All Products
+                            </a></li>
+                            {% for category in links %}
+                            <li><a href="{{ category.get_url }}" class="text-gray-600 font-medium hover:text-blue-600 transition pl-3.5">{{ category.category_name }}</a></li>
+                            {% endfor %}
                         </ul>
-                        {% for category in links %}
-                        <ul class="space-y-2 text-gray-600 mt-2 border-t pt-2">
-                            <li><a href="{{ category.get_url }}" class="hover:text-blue-600">{{ category.category_name }}</a></li>
-                        </ul>
-                        {% endfor %}
                     </div>
 
-                    <div class="border-b p-4">
-                        <h6 class="font-bold mb-3 uppercase text-xs text-gray-500">Sizes</h6>
-                        <div class="flex flex-wrap gap-2">
-                            <button class="border px-3 py-1 text-sm rounded hover:bg-gray-100 font-medium">XS</button>
-                            <button class="border px-3 py-1 text-sm rounded hover:bg-gray-100 font-medium">SM</button>
-                            <button class="border px-3 py-1 text-sm rounded hover:bg-gray-100 font-medium">LG</button>
-                            <button class="border px-3 py-1 text-sm rounded hover:bg-gray-100 font-medium">XXL</button>
-                        </div>
+                    <div class="mb-8 pt-6 border-t border-gray-50">
+                    
+    
                     </div>
 
-                    <div class="p-4">
-                        <h6 class="font-bold mb-3 uppercase text-xs text-gray-500">Price Range</h6>
-                        <div class="flex gap-2 mb-4">
-                            <select class="w-1/2 border rounded p-2 text-sm">
-                                <option>$0</option>
-                                <option>$50</option>
-                            </select>
-                            <select class="w-1/2 border rounded p-2 text-sm">
-                                <option>$500</option>
-                                <option>$1000+</option>
-                            </select>
-                        </div>
-                        <button class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition">Apply</button>
-                    </div>
-
+                   
                 </div>
             </aside>
 
             <main class="w-full md:w-3/4">
-                <header class="flex justify-between items-center border-b pb-4 mb-6">
-                    <span class="font-medium text-gray-700">{{ products.count }} Items found</span>
+                <header class="flex justify-between items-center mb-8 px-2">
+                    <span class="font-bold text-gray-900 text-lg">{{ products.count }} <span class="text-gray-400 font-medium text-sm ml-1">Products Found</span></span>
                 </header>
 
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                     {% if products %}
                         {% for product in products %}
-                        <div class="bg-white border rounded shadow-sm hover:shadow-md transition overflow-hidden">
-                            <div class="h-52 bg-gray-200">
+                        <div class="group relative bg-white rounded-3xl border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300 overflow-hidden flex flex-col h-full">
+                            
+                            <div class="relative aspect-[4/5] overflow-hidden bg-gray-100">
                                 {% if product.product_image %}
-                                    <a href="{{ product.get_url }}"><img src="{{ product.product_image.url }}" class="w-full h-full object-cover"></a>
+                                    <a href="{{ product.get_url }}">
+                                        <img src="{{ product.product_image.url }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                                    </a>
                                 {% else %}
-                                    <div class="flex items-center justify-center h-full text-gray-400">No Image</div>
+                                    <div class="flex items-center justify-center h-full text-gray-300 font-bold uppercase tracking-widest text-xs">No Image</div>
                                 {% endif %}
                             </div>
-                            <div class="p-4 text-center">
-                                <a href="{{ product.get_url }}" class="text-blue-600 hover:underline font-medium block h-12 overflow-hidden">{{ product.product_name }}</a>
-                                <div class="mt-2 mb-4"> 
-                                    <span class="text-xl font-bold text-gray-900">${{ product.price }}</span>
+                            
+                            <div class="p-6 flex flex-col flex-grow">
+                                <div class="mb-1">
+                                    <span class="text-[10px] font-bold text-blue-600 uppercase tracking-widest">{{ product.category }}</span>
                                 </div>
-                                <a href="{{ product.get_url }}" class="w-full bg-blue-600 text-white py-2 rounded flex items-center justify-center space-x-2 hover:bg-blue-700">
-                                    <span>View Details</span>
+                                
+                                <a href="{{ product.get_url }}" class="text-gray-900 font-bold text-xl hover:text-blue-600 transition-colors line-clamp-1 mb-2">
+                                    {{ product.product_name }}
                                 </a>
+                                
+                                <div class="mt-auto flex items-center justify-between">
+                                    <p class="text-2xl font-black text-gray-900">${{ product.price }}</p>
+                                    <a href="{{ product.get_url }}" class="text-sm font-bold text-blue-600 flex items-center gap-1 group/link transition-all">
+                                        Details <i class="fas fa-chevron-right text-[10px] group-hover/link:translate-x-1 transition-transform"></i>
+                                    </a>
+                                </div>
                             </div>
                         </div>
                         {% endfor %}
                     {% else %}
-                        <p class="text-center font-bold text-3xl  text-gray-800">No products found. </p>
+                        <div class="col-span-full py-20 text-center bg-white rounded-3xl border border-dashed border-gray-200">
+                            <h2 class="text-2xl font-bold text-gray-400">No products found matching your criteria.</h2>
+                        </div>
                     {% endif %}
                 </div>
 
-                
-                <nav class="mt-10 flex justify-center cursor-pointer">
+                <nav class="mt-16 flex justify-center">
                     {% if products.has_other_pages %}
-                        <ul class="flex border rounded overflow-hidden">
+                        <ul class="flex items-center gap-2">
                         {% if products.has_previous %}
-                            <li class="border-r px-4 py-2 hover:bg-gray-200  text-blue-600">
-                                <a href="?page={{products.previous_page_number}}">Previous</a>
-                            </li>
-                        {% else %}
-                            <li class="border-r px-4 py-2 bg-gray-100 text-gray-400">Previous</li>
+                            <li><a href="?page={{products.previous_page_number}}" class="w-10 h-10 flex items-center justify-center rounded-xl bg-white border border-gray-100 text-gray-600 hover:bg-gray-900 hover:text-white transition-all"><i class="fas fa-chevron-left"></i></a></li>
                         {% endif %}
 
                         {% for page_num in products.paginator.page_range %}
                             {% if products.number == page_num %}
-                                <li class=" cursor-pointer border-r px-4 py-2 hover:bg-gray-200 text-black font-bold">{{ page_num }}</li>
+                                <li><span class="w-10 h-10 flex items-center justify-center rounded-xl bg-blue-600 text-white font-black shadow-lg shadow-blue-100">{{ page_num }}</span></li>
                             {% else %}
-                                <li class=" cursor-pointer border-r px-4 py-2 hover:bg-gray-200 text-black font-bold"><a href="?page={{ page_num }}">{{ page_num }}</a></li>
+                                <li><a href="?page={{ page_num }}" class="w-10 h-10 flex items-center justify-center rounded-xl bg-white border border-gray-100 text-gray-600 font-bold hover:border-gray-900 hover:text-gray-900 transition-all">{{ page_num }}</a></li>
                             {% endif %}
                         {% endfor %}
 
-                            {% if products.has_next %}
-                            <li class="px-4 py-2 hover:bg-gray-200 text-blue-600"><a href="?page={{products.next_page_number}}">Next</a></li>
-                            {% else %}
-                            <li class="px-4 py-2 text-gray-400">Next</li>
-                            {% endif %}
+                        {% if products.has_next %}
+                            <li><a href="?page={{products.next_page_number}}" class="w-10 h-10 flex items-center justify-center rounded-xl bg-white border border-gray-100 text-gray-600 hover:bg-gray-900 hover:text-white transition-all"><i class="fas fa-chevron-right"></i></a></li>
+                        {% endif %}
                         </ul>
                     {% endif %}
                 </nav>
-
-
             </main>
         </div>
     </div>
 </section>
-
-
 {% endblock %}

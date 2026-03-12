@@ -1,6 +1,7 @@
 from django.db import models
 from django.urls import reverse
 from stripe.financial_connections import Account
+from accounts.models import Account  
 
 # Create your models here.
 from category.models import Category
