@@ -227,3 +227,5 @@ def dashboard(request):
         'orders_count': orders_count,
     }
     return render(request, 'accounts/dashboard.html', context)
+
+

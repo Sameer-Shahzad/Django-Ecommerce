@@ -33,7 +33,7 @@
                         <h6 class="font-black mb-4 uppercase text-[10px] tracking-[0.2em] text-gray-400">Categories</h6>
                         <ul class="space-y-3">
                             <li><a href="{% url 'store' %}" class="text-gray-900 font-bold hover:text-blue-600 transition flex items-center gap-2">
-                                <span class="w-1.5 h-1.5 rounded-full bg-blue-600"></span> All Products
+                                <span class=" bg-blue-600"></span> All Products
                             </a></li>
                             {% for category in links %}
                             <li><a href="{{ category.get_url }}" class="text-gray-600 font-medium hover:text-blue-600 transition pl-3.5">{{ category.category_name }}</a></li>

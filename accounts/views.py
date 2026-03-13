@@ -16,6 +16,8 @@ from django.core.mail import EmailMessage
 from django.http import HttpResponse
 from carts.models import Cart, CartItem
 from carts.views import _cart_id
+from django.contrib.auth import update_session_auth_hash
+from .forms import UserPasswordChangeForm 
 
 # Create your views here.
 
@@ -229,3 +231,31 @@ def resetPassword(request):
             return redirect('resetPassword')
             
     return render(request, 'accounts/resetPassword.html')
+
+
+
+def change_password(request):
+    if request.method == 'POST':
+
+        form = UserPasswordChangeForm(request.POST) 
+        
+        if form.is_valid():
+            user = request.user
+            current_password = form.cleaned_data['current_password']
+            new_password = form.cleaned_data['new_password']
+            
+            if user.check_password(current_password):
+                user.set_password(new_password)
+                user.save()
+                update_session_auth_hash(request, user)
+                messages.success(request, 'Password updated successfully!')
+                return redirect('change_password')
+            else:
+                messages.error(request, 'Your current password is wrong')
+        else:
+            for error in form.non_field_errors():
+                messages.error(request, error)
+    else:
+        form = UserPasswordChangeForm()
+    
+    return render(request, 'accounts/change_password.html', {'form': form})
