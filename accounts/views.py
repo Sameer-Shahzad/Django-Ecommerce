@@ -32,7 +32,10 @@ def register(request):
             email = form.cleaned_data.get('email')
             password1 = form.cleaned_data.get('password1')
             password2 = form.cleaned_data.get('password2')
-
+            if len(first_name) > 20:
+                form.add_error('first_name', "Name is too long (Max 20 chars).")
+            if len(last_name) > 20:
+                form.add_error('last_name', "Name is too long (Max 20 chars).")
             if not re.match(r'^[a-zA-Z\s]+$', first_name):
                 form.add_error('first_name', "Name should only contain letters!")
             
