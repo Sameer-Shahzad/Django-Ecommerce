@@ -41,6 +41,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = [os.environ.get('ALLOWED_HOSTS', '127.0.0.1'), 'localhost', 'aura-attire.onrender.com']
 
+# ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -189,10 +190,13 @@ EMAIL_USE_TLS = True
 # HSTS
 
 
-SECURE_HSTS_SECONDS = 31536000  
-SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-SECURE_HSTS_PRELOAD = True
-SECURE_SSL_REDIRECT = True
+# SECURE_HSTS_SECONDS = 31536000  
+# SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+# SECURE_HSTS_PRELOAD = True
+# SECURE_SSL_REDIRECT = True
+
+
+
 
 
 # **************************************** PROJECT FINISHED ********************************************
